@@ -1,4 +1,4 @@
-package vip.qsos.flow.base
+package vip.qsos.flow.model
 
 import vip.qsos.flow.core.IStep
 
@@ -6,16 +6,20 @@ import vip.qsos.flow.core.IStep
  * @author : 华清松
  */
 data class Step(
-    override var id: Int = -1,
-    override var title: String = "新建步骤",
-    override var desc: String = "步骤描述",
-    override var state: Int = 0,
-    override var form: Int = -1,
-    override var starter: IStep.IStarter = Starter(),
-    override var task: IStep.ITask = Task(),
-    override var replies: List<IStep.IReply> = arrayListOf(),
-    override var next: IStep.INext = Next()
-) : IStep {
+    var id: Int = -1,
+    var title: String = "新建步骤",
+    var desc: String = "步骤描述",
+    var state: Int = 0,
+    var form: Int = -1
+) {
+
+    var starter: Starter = Starter()
+
+    var task: Task = Task()
+
+    var replies: List<Reply> = arrayListOf()
+
+    var next: Next = Next()
 
     /**步骤启动器
      * @author : 华清松

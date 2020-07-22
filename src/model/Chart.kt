@@ -1,4 +1,4 @@
-package vip.qsos.flow.base
+package vip.qsos.flow.model
 
 import vip.qsos.flow.core.IChart
 

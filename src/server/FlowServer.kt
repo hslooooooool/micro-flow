@@ -1,12 +1,61 @@
-package vip.qsos.flow.base.server
+package vip.qsos.flow.server
 
-import vip.qsos.flow.base.Flow
+import vip.qsos.flow.model.Flow
+import vip.qsos.flow.model.Step
 import javax.xml.ws.http.HTTPException
 
 private val mFlowModelList: HashMap<Int, Flow> = HashMap()
 private val mFlowList: HashMap<Int, Flow> = HashMap()
+private val mFormModelList: HashMap<Int, Map<String, Int>> = HashMap()
+private val mFormList: HashMap<Int, Map<String, Int>> = HashMap()
+
+/**流程服务接口
+ * @author : 华清松
+ */
+interface FlowServer {
+    /**创建流程模型
+     * @param flow 流程数据
+     * */
+    fun creatFlowModel(flow: Flow): Flow
+
+    /**编辑流程模型
+     * @param flow 流程数据
+     * */
+    fun modifyFlowModel(flow: Flow): Flow
+
+    /**创建一个流程实例
+     * @param flowId 流程模版ID
+     * */
+    fun creatFlowBean(flowId: Int): Flow
+
+    /**激活一个流程实例
+     * @param flowId 流程模版ID
+     * */
+    fun startFlowBean(flowId: Int): Flow
+
+    /**挂起一个流程实例
+     * @param flowId 流程实例ID
+     * */
+    fun suspendFlow(flowId: Int): Flow
+
+    /**终止一个流程实例
+     * @param flowId 流程实例ID
+     * */
+    fun stopFlow(flowId: Int): Flow
+}
 
 class FlowServerImpl : FlowServer {
+
+    init {
+        mFormList.clear()
+        mFormModelList.clear()
+        mFormModelList[1] = mapOf(
+            "state" to 1
+        )
+        mFormModelList[2] = mapOf(
+            "state" to 2
+        )
+    }
 
     override fun creatFlowModel(flow: Flow): Flow {
         val id = mFlowModelList.size
@@ -16,6 +65,8 @@ class FlowServerImpl : FlowServer {
 
         flow.steps.forEachIndexed { x, step ->
             step.id = x
+
+            mFormModelList[step.form] ?: throw  HTTPException(500)
         }
         flow.startStep = flow.steps.first().id
         flow.endStep = flow.steps.last().id
@@ -69,34 +120,25 @@ class FlowServerImpl : FlowServer {
 
 }
 
-interface FlowServer {
-    /**创建流程模型
-     * @param flow 流程数据
+/**流程步骤接口
+ * @author : 华清松
+ */
+interface StepServer {
+    /**流程步骤变更
+     * @param step 流程步骤数据
      * */
-    fun creatFlowModel(flow: Flow): Flow
+    fun modify(step: Step): Step
+}
 
-    /**编辑流程模型
-     * @param flow 流程数据
-     * */
-    fun modifyFlowModel(flow: Flow): Flow
+class StepServerImpl : StepServer {
+    override fun modify(step: Step): Step {
+        val formModel = mFormModelList[step.form]?.keys ?: throw HTTPException(500)
+        step.task.taskIds.map {
+            mFormList[it]
+        }.forEach {
 
-    /**创建一个流程实例
-     * @param flowId 流程模版ID
-     * */
-    fun creatFlowBean(flowId: Int): Flow
+        }
 
-    /**激活一个流程实例
-     * @param flowId 流程模版ID
-     * */
-    fun startFlowBean(flowId: Int): Flow
-
-    /**挂起一个流程实例
-     * @param flowId 流程实例ID
-     * */
-    fun suspendFlow(flowId: Int): Flow
-
-    /**终止一个流程实例
-     * @param flowId 流程实例ID
-     * */
-    fun stopFlow(flowId: Int): Flow
+        return step
+    }
 }
