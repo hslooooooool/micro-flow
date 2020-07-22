@@ -13,6 +13,14 @@ interface IStep {
     /**步骤描述*/
     var desc: String
 
+    /**步骤状态
+     * - 0-待触发
+     * - 1-已触发（未启动）
+     * - 2-进行中（已启动）
+     * - 3-已停止
+     * */
+    var state: Int
+
     /**步骤表单（表单模版ID）*/
     var form: Int
 

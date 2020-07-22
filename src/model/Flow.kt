@@ -1,9 +1,6 @@
 package vip.qsos.flow.base
 
-import vip.qsos.flow.core.IChart
 import vip.qsos.flow.core.IFlow
-import vip.qsos.flow.core.ILog
-import vip.qsos.flow.core.IStep
 
 /**流程
  * @author : 华清松
@@ -19,12 +16,12 @@ data class Flow(
 ) : IFlow {
 
     /*步骤列表*/
-    override var steps: List<IStep> = arrayListOf()
+    var steps: List<Step> = arrayListOf()
 
     /*日志列表*/
-    override var logs: List<ILog> = arrayListOf()
+    var logs: List<Log> = arrayListOf()
 
     /*图列表*/
-    override var charts: List<IChart> = arrayListOf()
+    var charts: List<Chart> = arrayListOf()
 
 }

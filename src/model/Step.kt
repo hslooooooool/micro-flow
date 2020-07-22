@@ -9,6 +9,7 @@ data class Step(
     override var id: Int = -1,
     override var title: String = "新建步骤",
     override var desc: String = "步骤描述",
+    override var state: Int = 0,
     override var form: Int = -1,
     override var starter: IStep.IStarter = Starter(),
     override var task: IStep.ITask = Task(),
@@ -21,7 +22,7 @@ data class Step(
      */
     data class Starter(
         override var starterType: Int = 0,
-        override var starterTime: Long = -1
+        override var starterTime: Long = 0L
     ) : IStep.IStarter
 
     /**步骤任务

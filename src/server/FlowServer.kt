@@ -11,6 +11,9 @@ class FlowServerImpl : FlowServer {
     override fun creatFlowModel(flow: Flow): Flow {
         val id = mFlowModelList.size
         flow.id = id + 1
+
+        if (flow.steps.isEmpty()) throw HTTPException(500)
+
         flow.steps.forEachIndexed { x, step ->
             step.id = x
         }
@@ -32,26 +35,36 @@ class FlowServerImpl : FlowServer {
         return flow
     }
 
-    override fun startFlowBean(flowId: Int) {
+    override fun startFlowBean(flowId: Int): Flow {
         val flow = mFlowList[flowId] ?: throw HTTPException(500)
         flow.state = 1
         //TODO 执行启动触发条件
         val step = flow.steps.find { it.id == flow.startStep } ?: throw HTTPException(500)
         when (step.starter.starterType) {
             0 -> {
-                step.id
+                step.state = 2
             }
             1 -> {
+                step.state = 1
+                //TODO 加入计时器，倒计时
             }
         }
+
+        return flow
     }
 
-    override fun suspendFlow(flowId: Int) {
-        TODO("Not yet implemented")
+    override fun suspendFlow(flowId: Int): Flow {
+        val flow = mFlowList[flowId] ?: throw HTTPException(500)
+        flow.state = 2
+
+        return flow
     }
 
-    override fun stopFlow(flowId: Int) {
-        TODO("Not yet implemented")
+    override fun stopFlow(flowId: Int): Flow {
+        val flow = mFlowList[flowId] ?: throw HTTPException(500)
+        flow.state = 3
+
+        return flow
     }
 
 }
@@ -75,15 +88,15 @@ interface FlowServer {
     /**激活一个流程实例
      * @param flowId 流程模版ID
      * */
-    fun startFlowBean(flowId: Int)
+    fun startFlowBean(flowId: Int): Flow
 
     /**挂起一个流程实例
      * @param flowId 流程实例ID
      * */
-    fun suspendFlow(flowId: Int)
+    fun suspendFlow(flowId: Int): Flow
 
     /**终止一个流程实例
      * @param flowId 流程实例ID
      * */
-    fun stopFlow(flowId: Int)
+    fun stopFlow(flowId: Int): Flow
 }

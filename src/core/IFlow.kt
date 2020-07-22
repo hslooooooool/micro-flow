@@ -29,13 +29,4 @@ interface IFlow {
 
     /**流程版本*/
     var version: Int
-
-    /**步骤列表*/
-    var steps: List<IStep>
-
-    /**日志列表*/
-    var logs: List<ILog>
-
-    /**图列表*/
-    var charts: List<IChart>
 }

@@ -1,0 +1,33 @@
+<RestClientRequest>
+  <option name="biscuits">
+    <list />
+  </option>
+  <option name="httpMethod" value="POST" />
+  <option name="urlBase" value="http://localhost:8080" />
+  <option name="urlPath" value="/flow/model/create" />
+  <option name="headers">
+    <list>
+      <KeyValuePair>
+        <option name="key" value="Accept" />
+        <option name="value" value="*/*" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Cache-Control" />
+        <option name="value" value="no-cache" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Content-Type" />
+        <option name="value" value="application/json" />
+      </KeyValuePair>
+    </list>
+  </option>
+  <option name="parameters">
+    <list />
+  </option>
+  <option name="parametersEnabled" value="false" />
+  <option name="haveTextToSend" value="true" />
+  <option name="haveFileToSend" value="false" />
+  <option name="isFileUpload" value="false" />
+  <option name="textToSend" value="{&quot;id&quot;:0,&quot;title&quot;:&quot;描述&quot;,&quot;desc&quot;:&quot;dsdsd&quot;,&quot;state&quot;:1,&quot;startStep&quot;:1,&quot;endStep&quot;:1,&quot;version&quot;:1,   &quot;steps&quot;:[     {       &quot;id&quot;:1,&quot;title&quot;:&quot;描述&quot;,&quot;desc&quot;:&quot;dsdsd&quot;,&quot;state&quot;:1,&quot;form&quot;:1     },      {       &quot;id&quot;:1,&quot;title&quot;:&quot;描述&quot;,&quot;desc&quot;:&quot;dsdsd&quot;,&quot;state&quot;:1,&quot;form&quot;:1     }   ]  }" />
+  <option name="filesToSend" value="" />
+</RestClientRequest>
