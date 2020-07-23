@@ -71,7 +71,7 @@ interface IStep {
      */
     interface IReply {
         /*任务ID*/
-        var actionId: Int
+        var taskId: Int
 
         /*表单ID*/
         var formId: Int
@@ -81,13 +81,8 @@ interface IStep {
      * @author : 华清松
      */
     interface INext {
-        /**下一步类型：
-         * - 0-串行执行（步骤完成，直接触发后续步骤）；
-         * - 1-并行执行（步骤完成，直接触发后续步骤，后续多步骤并行触发）；
-         * - 2-网关判定（步骤完成，根据条件触发后续步骤）；
-         * - 3-流程结束（步骤完成，流程结束）
-         * */
-        var flow: Int
+
+        var flowType: Int
 
         /*下一步触发条件（正则表达式）*/
         var condition: String?

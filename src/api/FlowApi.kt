@@ -36,14 +36,14 @@ fun Application.api(testing: Boolean = false, testFlow: Flow? = null) {
                 call.receive()
             }
 
-            flow = mFlowServer.creatFlowModel(flow)
+            flow = mFlowServer.createFlowModel(flow)
             call.respond(flow)
         }
 
         /**流程实例创建*/
         post("/flow/create") {
             val flowId = call.parameters["id"]?.toInt() ?: throw HTTPException(500)
-            val flow = mFlowServer.creatFlowBean(flowId)
+            val flow = mFlowServer.createFlowBean(flowId)
             call.respond(flow)
         }
 

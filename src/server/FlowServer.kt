@@ -16,7 +16,7 @@ interface FlowServer {
     /**创建流程模型
      * @param flow 流程数据
      * */
-    fun creatFlowModel(flow: Flow): Flow
+    fun createFlowModel(flow: Flow): Flow
 
     /**编辑流程模型
      * @param flow 流程数据
@@ -26,7 +26,7 @@ interface FlowServer {
     /**创建一个流程实例
      * @param flowId 流程模版ID
      * */
-    fun creatFlowBean(flowId: Int): Flow
+    fun createFlowBean(flowId: Int): Flow
 
     /**激活一个流程实例
      * @param flowId 流程模版ID
@@ -57,7 +57,7 @@ class FlowServerImpl : FlowServer {
         )
     }
 
-    override fun creatFlowModel(flow: Flow): Flow {
+    override fun createFlowModel(flow: Flow): Flow {
         val id = mFlowModelList.size
         flow.id = id + 1
 
@@ -79,9 +79,12 @@ class FlowServerImpl : FlowServer {
         return flow
     }
 
-    override fun creatFlowBean(flowId: Int): Flow {
+    override fun createFlowBean(flowId: Int): Flow {
         val flow = mFlowModelList[flowId] ?: throw HTTPException(500)
         val id = mFlowList.size
+        flow.steps.forEach {
+            it.flowId = id
+        }
         mFlowList[id + 1] = flow
         return flow
     }
@@ -132,13 +135,48 @@ interface StepServer {
 
 class StepServerImpl : StepServer {
     override fun modify(step: Step): Step {
-        val formModel = mFormModelList[step.form]?.keys ?: throw HTTPException(500)
-        step.task.taskIds.map {
-            mFormList[it]
-        }.forEach {
+        val taskSize = step.task.taskIds.size
+        val resultMap: HashMap<Int, Int> = HashMap(taskSize)
+        step.task.taskIds.map { taskId ->
+            step.replies.find { reply ->
+                reply.taskId == taskId
+            }?.also { reply ->
+                val form = mFormList[reply.formId]
+                resultMap[reply.taskId] = form?.get("result") ?: 0
+            }
+        }
+        var a = 0
+        resultMap.values.forEach {
+            a += it
+        }
+        val pass = when (step.task.taskType) {
+            0 -> a > 0
+            1 -> a == taskSize
+            2 -> a > 0
+            else -> false
+        }
+        if (pass) {
+            step.state = 3
+
+            when (step.next.flowType) {
+                0, 1 -> {
+                    step.next.steps.forEach { s ->
+                        modify(s)
+                    }
+                }
+                2 -> {
+                    step.next.next.find { it.result == 1 }?.run {
+                        steps.forEach {
+                            modify(it)
+                        }
+                    }
+                }
+                3 -> {
+                    step.id
+                }
+            }
 
         }
-
         return step
     }
 }

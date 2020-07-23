@@ -40,7 +40,7 @@ fun Application.api(testing: Boolean = false) {
                     title { +title }
                 }
                 body {
-                    p {
+                    h1 {
                         +content
                     }
                     ul {

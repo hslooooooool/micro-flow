@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import vip.qsos.flow.api.api
 import vip.qsos.flow.model.Flow
@@ -39,7 +40,7 @@ class ApplicationTest {
                 form = 1
                 starter = Step.Starter(0, 0L)
                 task = Step.Task(0, setOf(1))
-                next = Step.Next(0, "state=1")
+                next = Step.Next(0, 1)
             }
             sSteps.add(step1)
             val step2 = Step().apply {
@@ -49,7 +50,7 @@ class ApplicationTest {
                 form = 2
                 starter = Step.Starter(0, 0L)
                 task = Step.Task(0, setOf(1))
-                next = Step.Next(0, "success=true")
+                next = Step.Next(0, 1)
             }
             sSteps.add(step2)
             val step3 = Step().apply {
@@ -59,7 +60,7 @@ class ApplicationTest {
                 form = 2
                 starter = Step.Starter(0, 0L)
                 task = Step.Task(0, setOf(1))
-                next = Step.Next(0, "success=true")
+                next = Step.Next(0, 0)
             }
             sSteps.add(step3)
             steps = sSteps
@@ -76,19 +77,22 @@ class ApplicationTest {
             }
             println("【通过】较验流程实例创建")
 
+            var testStep: Step
             handleRequest(HttpMethod.Post, "/flow/start?id=1").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 val f = Gson().fromJson(response.content, Flow::class.java)
                 assertEquals(1, f.state)
                 assertEquals(2, f.steps.first().state)
+
+                testStep = f.steps.first()
             }
             println("【通过】较验触发流程实例启动")
 
-            handleRequest(HttpMethod.Post, "/flow/start?id=1").apply {
+            handleRequest(HttpMethod.Post, "/step/modify").apply {
+                request.setBody(testStep.toString())
                 assertEquals(HttpStatusCode.OK, response.status())
-                val f = Gson().fromJson(response.content, Flow::class.java)
-                assertEquals(1, f.state)
-                assertEquals(2, f.steps.first().state)
+                val s = Gson().fromJson(response.content, Step::class.java)
+                assertEquals(2, s.state)
             }
             println("【通过】较验流程第一步完成，触发下一步骤")
 
