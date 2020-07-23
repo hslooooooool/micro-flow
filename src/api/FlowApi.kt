@@ -64,8 +64,12 @@ fun Application.api(testing: Boolean = false, testFlow: Flow? = null) {
     routing {
         /**流程步骤变动，任意变动将判断流程状态，及其下一步触发条件，若满足条件，则完成此步骤并触发后续步骤*/
         post("/step/modify") {
-            val step = call.receive<Step>()
-            call.respond(mStepServer.modify(step))
+            if (testing) {
+                call.respond(mStepServer.modify(Step()))
+            } else {
+                val step = call.receive<Step>()
+                call.respond(mStepServer.modify(step))
+            }
         }
     }
 }

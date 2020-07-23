@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import vip.qsos.flow.api.api
 import vip.qsos.flow.model.Flow
@@ -52,6 +51,7 @@ class ApplicationTest {
                 task = Step.Task(0, setOf(1))
                 next = Step.Next(0, 1)
             }
+            step1.next.steps = arrayListOf(step2)
             sSteps.add(step2)
             val step3 = Step().apply {
                 title = "第三步骤标题"
@@ -62,6 +62,7 @@ class ApplicationTest {
                 task = Step.Task(0, setOf(1))
                 next = Step.Next(0, 0)
             }
+            step2.next.steps = arrayListOf(step3)
             sSteps.add(step3)
             steps = sSteps
         }
@@ -89,7 +90,6 @@ class ApplicationTest {
             println("【通过】较验触发流程实例启动")
 
             handleRequest(HttpMethod.Post, "/step/modify").apply {
-                request.setBody(testStep.toString())
                 assertEquals(HttpStatusCode.OK, response.status())
                 val s = Gson().fromJson(response.content, Step::class.java)
                 assertEquals(2, s.state)

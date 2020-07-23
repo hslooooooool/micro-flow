@@ -50,10 +50,10 @@ class FlowServerImpl : FlowServer {
         mFormList.clear()
         mFormModelList.clear()
         mFormModelList[1] = mapOf(
-            "state" to 1
+            "result" to 0
         )
         mFormModelList[2] = mapOf(
-            "state" to 2
+            "result" to 1
         )
     }
 
@@ -134,7 +134,11 @@ interface StepServer {
 }
 
 class StepServerImpl : StepServer {
-    override fun modify(step: Step): Step {
+    override fun modify(sstep: Step): Step {
+        //fixme
+        val step = mFlowList[1]?.steps?.first() ?: throw HTTPException(500)
+        //fixme
+
         val taskSize = step.task.taskIds.size
         val resultMap: HashMap<Int, Int> = HashMap(taskSize)
         step.task.taskIds.map { taskId ->
