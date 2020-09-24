@@ -20,8 +20,6 @@ private val mFlowServer: FlowServer by lazy {
 
 private val mStepServer: StepServer by lazy {
     StepServerImpl()
-
-
 }
 
 @kotlin.jvm.JvmOverloads

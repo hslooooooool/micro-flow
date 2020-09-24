@@ -5,9 +5,18 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
+import org.apache.poi.xwpf.converter.core.BasicURIResolver
+import org.apache.poi.xwpf.converter.core.FileImageExtractor
+import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter
+import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions
+import org.apache.poi.xwpf.usermodel.XWPFDocument
 import vip.qsos.flow.api.api
 import vip.qsos.flow.model.Flow
 import vip.qsos.flow.model.Step
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -92,6 +101,29 @@ class ApplicationTest {
             }
             println("【通过】较验流程第一步完成，触发下一步骤")
 
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun word2007ToHtml() {
+        val filepath = "D:\\tmp\\"
+        val sourceFileName = filepath + "1.doc"
+        val targetFileName = filepath + "2.html"
+        val imagePathStr = "$filepath/image/"
+        var outputStreamWriter: OutputStreamWriter? = null
+        try {
+            val document = XWPFDocument(FileInputStream(sourceFileName))
+            val options: XHTMLOptions = XHTMLOptions.create()
+            // 存放图片的文件夹
+            options.extractor = FileImageExtractor(File(imagePathStr))
+            // html中图片的路径
+            options.URIResolver(BasicURIResolver("image"))
+            outputStreamWriter = OutputStreamWriter(FileOutputStream(targetFileName), "utf-8")
+            val xhtmlConverter: XHTMLConverter = XHTMLConverter.getInstance() as XHTMLConverter
+            xhtmlConverter.convert(document, outputStreamWriter, options)
+        } finally {
+            outputStreamWriter?.close()
         }
     }
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jsPDF插件</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="https://code.jquery.com/jquery-git.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+</head>
+
+<body>
+<div>
+    <h1>js将页面内容转成pdf</h1>
+    <p>pdf（Portable Document Format的简称，意为“便携式文档格式”），是由Adobe
+        Systems用于与应用程序、操作系统、硬件无关的方式进行文件交换所发展出的文件格式。PDF文件以PostScript语言图象模型为基础，无论在哪种打印机上都可保证精确的颜色和准确的打印效果，即PDF会忠实地再现原稿的每一个字符、颜色以及图象。
+        可移植文档格式是一种电子文件格式。这种文件格式与操作系统平台无关，也就是说，PDF文件不管是在Windows，Unix还是在苹果公司的Mac
+        OS操作系统中都是通用的。这一特点使它成为在Internet上进行电子文档发行和数字化信息传播的理想文档格式。越来越多的电子图书、产品说明、公司文告、网络资料、电子邮件在开始使用PDF格式文件。
+        Adobe公司设计PDF文件格式的目的是为了支持跨平台上的，多媒体集成的信息出版和发布，尤其是提供对网络信息发布的支持。为了达到此目的，
+        PDF具有许多其他电子文档格式无法相比的优点。PDF文件格式可以将文字、字型、格式、颜色及独立于设备和分辨率的图形图像等封装在一个文件中。该格式文件还可以包含超文本链接、声音和动态影像等电子信息，支持特长文件，集成度和安全可靠性都较高。
+		对普通读者而言，用PDF制作的电子书具有纸版书的质感和阅读效果，可以逼真地展现原书的原貌，而显示大小可任意调节，给读者提供了个性化的阅读方式。</p>
+</div>
+<script type="text/javascript">
+    var pdf = new jsPDF('p', 'pt', 'a4');
+    pdf.internal.scaleFactor = 1;
+    var options = {
+        pagesplit: false
+    };
+    //$('.pdf-wrapper')
+    pdf.addHTML(document.body, options, function () {
+        pdf.save('test.pdf');
+    });
+</script>
+</body>
+
+</html>

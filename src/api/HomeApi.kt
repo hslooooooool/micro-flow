@@ -31,7 +31,7 @@ fun Application.api(testing: Boolean = false) {
     installContentNegotiation()
 
     routing {
-        get("/") {
+        get("/123") {
             val title = "测试页面"
             val content = "测试内容"
             val list = arrayListOf<String>("蛋糕\uD83C\uDF82", "啤酒\uD83C\uDF7A", "饮料🥤", "水果🍎")

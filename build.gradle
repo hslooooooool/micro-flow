@@ -37,4 +37,13 @@ dependencies {
     implementation "io.ktor:ktor-gson:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
+
+    implementation group: 'org.apache.poi', name: 'poi', version: '3.14'
+    implementation group: 'org.apache.poi', name: 'poi-scratchpad', version: '3.14'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.14'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.14'
+    implementation group: 'org.apache.poi', name: 'ooxml-schemas', version: '1.3'
+    implementation group: 'org.apache.directory.studio', name: 'org.apache.commons.io', version: '2.4'
+    implementation group: 'fr.opensagres.xdocreport', name: 'xdocreport', version: '1.0.6'
+
 }
